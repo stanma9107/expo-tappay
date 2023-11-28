@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
-
-import * as ExpoTappay from 'expo-tappay';
+import * as ExpoTappay from "expo-tappay";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>{ExpoTappay.hello()}</Text>
+      <Text>{ExpoTappay.getTheme()}</Text>
     </View>
   );
 }
@@ -13,8 +12,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
