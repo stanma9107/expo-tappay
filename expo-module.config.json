@@ -1,9 +1,6 @@
 {
-  "platforms": ["ios", "android"],
+  "platforms": ["ios"],
   "ios": {
     "modules": ["ExpoTappayModule"]
-  },
-  "android": {
-    "modules": ["dev.stanma.tappay.ExpoTappayModule"]
   }
 }
