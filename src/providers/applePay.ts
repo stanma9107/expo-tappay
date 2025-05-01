@@ -3,6 +3,7 @@
 // Copyright         : 2025 Stan Ma
 
 import { UnavailabilityError } from "expo-module-scripts";
+import type { EventSubscription } from "expo-modules-core";
 
 import ExpoTappayModule from "../ExpoTappayModule";
 import { BasePaymentProvider } from "./base";
@@ -91,5 +92,83 @@ export class ApplePay extends BasePaymentProvider {
     }
 
     return ExpoTappayModule.showApplePayResult(isSuccess);
+  }
+
+  /**
+   * Add Apple Pay Recieve Prime Listener
+   */
+  public addRecievePrimeListener(
+    listener: (data: ApplePayTypes.OnReceivePrimeEvent) => void,
+  ): EventSubscription {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addListener("onReceivePrime", listener);
+  }
+
+  /**
+   * Add Apple Pay Start Listener
+   */
+  public addStartListener(
+    listener: (data: ApplePayTypes.OnApplePayGeneralEvent) => void,
+  ): EventSubscription {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addListener("onApplePayStart", listener);
+  }
+
+  /**
+   * Add Apple Pay Cancel Listener
+   */
+  public addCancelListener(
+    listener: (data: ApplePayTypes.OnApplePayGeneralEvent) => void,
+  ): EventSubscription {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addListener("onApplePayCancel", listener);
+  }
+
+  /**
+   * Add Apple Pay Success Listener
+   */
+  public addSuccessListener(
+    listener: (data: ApplePayTypes.OnApplePayTransactionEvent) => void,
+  ): EventSubscription {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addListener("onApplePaySuccess", listener);
+  }
+
+  /**
+   * Add Apple Pay Failed Listener
+   */
+  public addFailedListener(
+    listener: (data: ApplePayTypes.OnApplePayTransactionEvent) => void,
+  ): EventSubscription {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addListener("onApplePayFailed", listener);
+  }
+
+  /**
+   * Add Apple Pay Finished Listener
+   */
+  public addFinishedListener(
+    listener: (data: ApplePayTypes.OnApplePayTransactionEvent) => void,
+  ): EventSubscription {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addListener("onApplePayFinished", listener);
   }
 }

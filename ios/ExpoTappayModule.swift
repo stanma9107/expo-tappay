@@ -5,6 +5,13 @@
 import ExpoModulesCore
 import TPDirect
 
+let APPLE_PAY_START_EVENT_NAME = "onApplePayStart"
+let APPLE_PAY_CANCEL_EVENT_NAME = "onApplePayCancel"
+let APPLE_PAY_SUCCESS_EVENT_NAME = "onApplePaySuccess"
+let APPLE_PAY_RECEIVE_PRIME_EVENT_NAME = "onReceivePrime"
+let APPLE_PAY_FAILED_EVENT_NAME = "onApplePayFailed"
+let APPLE_PAY_FINISH_EVENT_NAME = "onApplePayFinished"
+
 enum ServerType: String, Enumerable {
     case sandbox
     case production
@@ -36,6 +43,12 @@ public class ExpoTappayModule: Module {
         var applePay: TPDApplePay!
         var cart: TPDCart = TPDCart()
         
+        Events(APPLE_PAY_START_EVENT_NAME)
+        Events(APPLE_PAY_CANCEL_EVENT_NAME)
+        Events(APPLE_PAY_SUCCESS_EVENT_NAME)
+        Events(APPLE_PAY_RECEIVE_PRIME_EVENT_NAME)
+        Events(APPLE_PAY_FAILED_EVENT_NAME)
+        Events(APPLE_PAY_FINISH_EVENT_NAME)
         
         // TODO: Setup Tappay with App ID & App Key
         Function("setup") { (appId: Int32, appKey: String, serverType: ServerType) -> Void in

@@ -7,7 +7,14 @@ import { NativeModule } from "expo";
 import * as ApplePayTypes from "./applePay.types";
 import { TPDServerType } from "./config.types";
 
-export type ExpoTappayModuleEvents = {};
+export type ExpoTappayModuleEvents = {
+  onApplePayStart: (data: ApplePayTypes.OnApplePayGeneralEvent) => void;
+  onApplePayCancel: (data: ApplePayTypes.OnApplePayGeneralEvent) => void;
+  onApplePaySuccess: (data: ApplePayTypes.OnApplePayTransactionEvent) => void;
+  onReceivePrime: (data: ApplePayTypes.OnReceivePrimeEvent) => void;
+  onApplePayFailed: (data: ApplePayTypes.OnApplePayTransactionEvent) => void;
+  onApplePayFinished: (data: ApplePayTypes.OnApplePayTransactionEvent) => void;
+};
 
 export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvents> {
   // TODO: Setup Tappay with App ID & App Key
