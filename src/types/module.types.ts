@@ -4,6 +4,7 @@
 
 import { NativeModule } from "expo";
 
+import * as ApplePayTypes from "./applePay.types";
 import { TPDServerType } from "./config.types";
 
 export type ExpoTappayModuleEvents = {};
@@ -20,4 +21,14 @@ export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvent
 
   // TODO: Check if Apple Pay is available
   isApplePayAvailable(): Promise<boolean>;
+
+  // TODO: Setup Apple Pay Merchant
+  setupApplePayMerchant(
+    name: string,
+    merchantCapability: ApplePayTypes.merchantCapability,
+    merchantId: string,
+    countryCode: string,
+    currencyCode: string,
+    supportedNetworks: ApplePayTypes.applePayNetwork[],
+  ): void;
 }
