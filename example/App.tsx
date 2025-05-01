@@ -48,6 +48,12 @@ export default function App() {
               );
             }}
           />
+          <Button
+            title="Show Apple Pay Setup View"
+            onPress={async () => {
+              tappay.applePay.showSetupView();
+            }}
+          />
         </Group>
         <Group name="Line Pay">
           <Button

@@ -32,4 +32,15 @@ export class ApplePay extends BasePaymentProvider {
       params.supportedNetworks,
     );
   }
+
+  /**
+   * Show Apple Pay Setup View
+   */
+  public async showSetupView(): Promise<void> {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.showApplePaySetupView();
+  }
 }

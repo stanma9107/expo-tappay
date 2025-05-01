@@ -84,5 +84,10 @@ public class ExpoTappayModule: Module {
             // Support Networks
             merchant.supportedNetworks = networks.map { PKPaymentNetwork(rawValue: $0.rawValue) }
         }
+        
+        // TODO: Show Setup Page
+        Function("showApplePaySetupView") {
+            TPDApplePay.showSetupView()
+        }
     }
 }

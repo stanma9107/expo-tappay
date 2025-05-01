@@ -31,4 +31,7 @@ export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvent
     currencyCode: string,
     supportedNetworks: ApplePayTypes.applePayNetwork[],
   ): void;
+
+  // TODO: Show Apple Pay Setup View
+  showApplePaySetupView(): void;
 }
