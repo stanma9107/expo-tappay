@@ -1,36 +1,64 @@
-import { useEvent } from 'expo';
-import ExpoTappay, { ExpoTappayView } from 'expo-tappay';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import Tappay from "expo-tappay";
+import {
+  Alert,
+  Button,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 export default function App() {
-  const onChangePayload = useEvent(ExpoTappay, 'onChange');
+  const tappay = new Tappay({
+    appId: 11340,
+    appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC",
+    serverType: "sandbox",
+  });
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{ExpoTappay.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{ExpoTappay.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
+        <Button
+          title="Setup Tappay"
+          onPress={() => {
+            tappay.setup();
+          }}
+        />
+        <Group name="Generic">
           <Button
-            title="Set value"
+            title="Check Generic Availability"
             onPress={async () => {
-              await ExpoTappay.setValueAsync('Hello from JS!');
+              const isAvailable = await tappay.generic.isAvailable();
+              Alert.alert(
+                "Generic Availability",
+                isAvailable ? "Available" : "Not Available",
+              );
             }}
           />
         </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
+        <Group name="Apple Pay">
+          <Button
+            title="Check Apple Pay Availability"
+            onPress={async () => {
+              const isAvailable = await tappay.applePay.isAvailable();
+              Alert.alert(
+                "Apple Pay Availability",
+                isAvailable ? "Available" : "Not Available",
+              );
+            }}
+          />
         </Group>
-        <Group name="Views">
-          <ExpoTappayView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
+        <Group name="Line Pay">
+          <Button
+            title="Check Line Pay Availability"
+            onPress={async () => {
+              const isAvailable = await tappay.linePay.isAvailable();
+              Alert.alert(
+                "Line Pay Availability",
+                isAvailable ? "Available" : "Not Available",
+              );
+            }}
           />
         </Group>
       </ScrollView>
@@ -58,13 +86,13 @@ const styles = {
   },
   group: {
     margin: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
   },
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
   },
   view: {
     flex: 1,
