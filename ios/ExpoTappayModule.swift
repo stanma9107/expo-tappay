@@ -1,48 +1,23 @@
+// Copyright         : 2025 Stan Ma
+// File Name         : ExpoTappay/ios/ExpoTappayModule.swift
+// Description       : Expo Module to integrate with Third-Party Payment Service Provider (Tappay)
+
 import ExpoModulesCore
+import TPDirect
+
+enum ServerType: String, Enumerable {
+  case sandbox
+  case production
+}
 
 public class ExpoTappayModule: Module {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  public func definition() -> ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoTappay')` in JavaScript.
-    Name("ExpoTappay")
-
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
-    }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(ExpoTappayView.self) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { (view: ExpoTappayView, url: URL) in
-        if view.webView.url != url {
-          view.webView.load(URLRequest(url: url))
+    public func definition() -> ModuleDefinition {
+        Name("ExpoTappay")
+      
+        // TODO: Setup Tappay with App ID & App Key
+        Function("setup") { (appId: Int32, appKey: String, serverType: ServerType) -> Void in
+            let serverType: TPDServerType = (serverType == .production) ? .production : .sandBox
+            TPDSetup.setWithAppId(appId, withAppKey: appKey, with: serverType)
         }
-      }
-
-      Events("onLoad")
-    }
   }
 }
