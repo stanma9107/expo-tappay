@@ -1,4 +1,5 @@
 import Tappay from "expo-tappay";
+import { useEffect } from "react";
 import {
   Alert,
   Button,
@@ -14,6 +15,19 @@ export default function App() {
     appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC",
     serverType: "sandbox",
   });
+
+  useEffect(() => {
+    const primeListener = tappay.applePay.addRecievePrimeListener((data) => {
+      if (data.success) {
+        console.log(data.prime);
+      }
+      tappay.applePay.showResult(data.success);
+    });
+
+    return () => {
+      primeListener.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,6 +60,31 @@ export default function App() {
                 "Apple Pay Availability",
                 isAvailable ? "Available" : "Not Available",
               );
+            }}
+          />
+          <Button
+            title="Setup Apple Pay Merchant"
+            onPress={async () => {
+              tappay.applePay.setupMerchant({
+                name: "Stan",
+                merchantCapability: "threeDSecure",
+                merchantId: "merchant.your.identifier",
+                countryCode: "TW",
+                currencyCode: "TWD",
+                supportedNetworks: ["Visa", "MasterCard"],
+              });
+            }}
+          />
+          <Button
+            title="Show Apple Pay Setup View"
+            onPress={async () => {
+              tappay.applePay.showSetupView();
+            }}
+          />
+          <Button
+            title="Start Apple Pay Payment"
+            onPress={async () => {
+              tappay.applePay.startPayment([{ name: "Test", amount: 100 }]);
             }}
           />
         </Group>

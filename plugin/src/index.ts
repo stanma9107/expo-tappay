@@ -7,6 +7,7 @@ import {
   ConfigPlugin,
   withAndroidManifest,
   withEntitlementsPlist,
+  AndroidConfig,
 } from "expo/config-plugins";
 
 type PaymentProvider = "generic" | "applePay" | "linePay";
@@ -81,15 +82,25 @@ const withAllowBackupFalse: ConfigPlugin = (config) => {
 const withLinePayQueryScheme: ConfigPlugin = (config) => {
   config = withAndroidManifest(config, (config) => {
     console.log("Applying queries in manifest...");
-    config.modResults.manifest.queries.push({
-      package: [
-        {
-          $: {
-            "android:name": "jp.naver.line.android",
+    if (!config.modResults.manifest.queries) {
+      config.modResults.manifest.queries = [];
+    }
+    const existingQuery = config.modResults.manifest.queries.find(
+      (query) =>
+        query.package?.[0]?.$["android:name"] === "jp.naver.line.android",
+    );
+    if (!existingQuery) {
+      config.modResults.manifest.queries.push({
+        package: [
+          {
+            $: {
+              "android:name": "jp.naver.line.android",
+            },
           },
-        },
-      ],
-    });
+        ],
+      });
+      return config;
+    }
     return config;
   });
   return config;
@@ -132,7 +143,7 @@ const withGeneric: ConfigPlugin<GenericConfig> = (config, payload) => {
 };
 
 const enablePayment: ConfigPlugin<PaymentProvider> = (config, payment) => {
-  return withInfoPlist(config, (config) => {
+  config = withInfoPlist(config, (config) => {
     if (!config.modResults["TPDSupportPayments"]) {
       config.modResults["TPDSupportPayments"] = [];
     }
@@ -143,6 +154,37 @@ const enablePayment: ConfigPlugin<PaymentProvider> = (config, payment) => {
     }
     return config;
   });
+
+  config = withAndroidManifest(config, (config) => {
+    const mainApplication = config.modResults.manifest.application?.[0];
+    if (mainApplication) {
+      if (!mainApplication["meta-data"]) {
+        mainApplication["meta-data"] = [];
+      }
+
+      const existingMetaData = mainApplication["meta-data"].find(
+        (item) => item.$["android:name"] === "TPDSupportPayments",
+      );
+
+      if (existingMetaData) {
+        const currentPayments = existingMetaData.$["android:value"]?.split(",");
+        if (!currentPayments?.includes(payment)) {
+          currentPayments?.push(payment);
+          existingMetaData.$["android:value"] = currentPayments?.join(",");
+        }
+      } else {
+        mainApplication["meta-data"].push({
+          $: {
+            "android:name": "TPDSupportPayments",
+            "android:value": payment,
+          },
+        });
+      }
+    }
+    return config;
+  });
+
+  return config;
 };
 
 const withPaymentConfig: ConfigPlugin<ConfigPayload> = (config, payload) => {

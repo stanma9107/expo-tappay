@@ -5,6 +5,13 @@
 import ExpoModulesCore
 import TPDirect
 
+let APPLE_PAY_START_EVENT_NAME = "onApplePayStart"
+let APPLE_PAY_CANCEL_EVENT_NAME = "onApplePayCancel"
+let APPLE_PAY_SUCCESS_EVENT_NAME = "onApplePaySuccess"
+let APPLE_PAY_RECEIVE_PRIME_EVENT_NAME = "onReceivePrime"
+let APPLE_PAY_FAILED_EVENT_NAME = "onApplePayFailed"
+let APPLE_PAY_FINISH_EVENT_NAME = "onApplePayFinished"
+
 enum ServerType: String, Enumerable {
     case sandbox
     case production
@@ -18,9 +25,9 @@ enum MerchantCapability: String, Enumerable {
 }
 
 enum ApplePayNetwork: String, Enumerable {
-    case amex
-    case visa
-    case masterCard
+    case AmEx
+    case Visa
+    case MasterCard
     case JCB
 }
 
@@ -30,8 +37,19 @@ public class ExpoTappayModule: Module {
         
         let supportPayments = Bundle.main.object(forInfoDictionaryKey: "TPDSupportPayments") as? NSArray ?? []
         
+        // APPLE PAY
+        let consumer: TPDConsumer = TPDConsumer()
         let merchant: TPDMerchant = TPDMerchant()
-      
+        var applePay: TPDApplePay!
+        var cart: TPDCart = TPDCart()
+        
+        Events(APPLE_PAY_START_EVENT_NAME)
+        Events(APPLE_PAY_CANCEL_EVENT_NAME)
+        Events(APPLE_PAY_SUCCESS_EVENT_NAME)
+        Events(APPLE_PAY_RECEIVE_PRIME_EVENT_NAME)
+        Events(APPLE_PAY_FAILED_EVENT_NAME)
+        Events(APPLE_PAY_FINISH_EVENT_NAME)
+        
         // TODO: Setup Tappay with App ID & App Key
         Function("setup") { (appId: Int32, appKey: String, serverType: ServerType) -> Void in
             let serverType: TPDServerType = (serverType == .production) ? .production : .sandBox
@@ -60,18 +78,18 @@ public class ExpoTappayModule: Module {
             
             // Merchant Capability
             switch merchantCapability {
-                case .credit:
-                    merchant.merchantCapability = .credit
-                    break;
-                case .debit:
-                    merchant.merchantCapability = .debit
-                    break;
-                case .emv:
-                    merchant.merchantCapability = .emv
-                    break;
-                default:
-                    merchant.merchantCapability = .threeDSecure
-                    break;
+            case .credit:
+                merchant.merchantCapability = .credit
+                break;
+            case .debit:
+                merchant.merchantCapability = .debit
+                break;
+            case .emv:
+                merchant.merchantCapability = .emv
+                break;
+            default:
+                merchant.merchantCapability = .threeDSecure
+                break;
             }
             
             // Merchant Identifier
@@ -83,6 +101,37 @@ public class ExpoTappayModule: Module {
             
             // Support Networks
             merchant.supportedNetworks = networks.map { PKPaymentNetwork(rawValue: $0.rawValue) }
+        }
+        
+        // TODO: Show Setup Page
+        Function("showApplePaySetupView") {
+            TPDApplePay.showSetupView()
+        }
+        
+        // TODO: Clear Cart
+        Function("clearApplePayCart") {
+            cart = TPDCart()
+        }
+        
+        // TODO: Add New Item to Cart
+        Function("addItemToApplePayCart") {(name: String, amount: Int) in
+            cart.add(TPDPaymentItem(itemName: name, withAmount: NSDecimalNumber(value: amount)))
+        }
+        
+        // TODO: Start Apple Pay Payment
+        AsyncFunction("startApplePay") { (promise: Promise) in
+            let applePayDelegate = ApplePayDelegate() { (name: String, body: [String: Any?]) -> Void in
+                self.sendEvent(name, body)
+            }
+            applePay = TPDApplePay.setupWthMerchant(merchant, with: consumer, with: cart, withDelegate: applePayDelegate)
+            
+            // TODO: Start Payment
+            applePay.startPayment()
+        }
+        
+        // TODO: Show Apple Pay Payment Result in Payment Sheet
+        Function("showApplePayResult") { (isSuccess: Bool) in
+            applePay.showPaymentResult(isSuccess)
         }
     }
 }

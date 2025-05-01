@@ -32,7 +32,7 @@
         {
           "applePay": {
             "enable": true,
-            "merchantId": "merchant.lava.hwstud.io"
+            "merchantId": "merchant.your.identifier"
           },
           "linePay": {
             "enable": true
