@@ -1,6 +1,6 @@
 {
   "name": "expo-tappay",
-  "version": "0.1.0",
+  "version": "1.0.0-dev.1",
   "description": "The Expo Module to Integrate with Tappay Payments",
   "main": "build/index.js",
   "types": "build/index.d.ts",
