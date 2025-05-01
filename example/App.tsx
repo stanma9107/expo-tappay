@@ -49,9 +49,28 @@ export default function App() {
             }}
           />
           <Button
+            title="Setup Apple Pay Merchant"
+            onPress={async () => {
+              tappay.applePay.setupMerchant({
+                name: "Stan",
+                merchantCapability: "threeDSecure",
+                merchantId: "merchant.your.identifier",
+                countryCode: "TW",
+                currencyCode: "TWD",
+                supportedNetworks: ["Visa", "MasterCard"],
+              });
+            }}
+          />
+          <Button
             title="Show Apple Pay Setup View"
             onPress={async () => {
               tappay.applePay.showSetupView();
+            }}
+          />
+          <Button
+            title="Start Apple Pay Payment"
+            onPress={async () => {
+              tappay.applePay.startPayment([{ name: "Test", amount: 100 }]);
             }}
           />
         </Group>

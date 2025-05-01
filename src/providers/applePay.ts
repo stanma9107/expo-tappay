@@ -43,4 +43,53 @@ export class ApplePay extends BasePaymentProvider {
 
     return ExpoTappayModule.showApplePaySetupView();
   }
+
+  /**
+   * Clear Apple Pay Cart
+   */
+  private async clearCart(): Promise<void> {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.clearApplePayCart();
+  }
+
+  /**
+   * Add Item to Apple Pay Cart
+   */
+  private async addItemToCart(name: string, amount: number): Promise<void> {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.addItemToApplePayCart(name, amount);
+  }
+
+  /**
+   * Start Apple Pay Payment
+   */
+  public startPayment(cartItems: ApplePayTypes.ApplePayPaymentItem[]): void {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    this.clearCart();
+    for (const item of cartItems) {
+      this.addItemToCart(item.name, item.amount);
+    }
+
+    ExpoTappayModule.startApplePay();
+  }
+
+  /**
+   * Show Apple Pay Result
+   */
+  public async showResult(isSuccess: boolean): Promise<void> {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError("Apple Pay is not available");
+    }
+
+    return ExpoTappayModule.showApplePayResult(isSuccess);
+  }
 }

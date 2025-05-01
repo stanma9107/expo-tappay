@@ -34,4 +34,16 @@ export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvent
 
   // TODO: Show Apple Pay Setup View
   showApplePaySetupView(): void;
+
+  // TODO: Clear Apple Pay Cart
+  clearApplePayCart(): void;
+
+  // TODO: Add Item to Apple Pay Cart
+  addItemToApplePayCart(name: string, amount: number): void;
+
+  // TODO: Start Apple Pay Payment
+  startApplePay(): Promise<void>;
+
+  // TODO: Show Result to Apple Pay
+  showApplePayResult(isSuccess: boolean): void;
 }

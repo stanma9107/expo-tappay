@@ -4,7 +4,7 @@
 
 export type merchantCapability = "debit" | "credit" | "emv" | "threeDSecure";
 
-export type applePayNetwork = "amex" | "visa" | "masterCard" | "JCB";
+export type applePayNetwork = "AmEx" | "Visa" | "MasterCard" | "JCB";
 
 /**
  * Setup Apple Pay Merchant Parameters
@@ -45,4 +45,21 @@ export type SetupMerchantParams = {
    * The supported networks (amex, visa, masterCard, JCB)
    */
   supportedNetworks: applePayNetwork[];
+};
+
+/**
+ * Apple Pay Payment Item
+ * @param name - The name of the payment item
+ * @param amount - The amount of the payment item
+ */
+export type ApplePayPaymentItem = {
+  /**
+   * The name of the payment item
+   */
+  name: string;
+
+  /**
+   * The amount of the payment item
+   */
+  amount: number;
 };
