@@ -10,24 +10,10 @@ export default {
       prerelease: true,
     },
   ],
-  tagFormat: "v${version}",
   plugins: [
-    [
-      "@semantic-release/commit-analyzer",
-      {
-        preset: "angular",
-        releaseRules: [
-          { type: "feat", release: "minor" },
-          { type: "fix", release: "patch" },
-          { type: "perf", release: "patch" },
-          { type: "revert", release: "patch" },
-          { type: "docs", release: "patch" },
-        ],
-      },
-    ],
+    "@semantic-release/commit-analyzer",
     "@semantic-release/changelog",
     "@semantic-release/release-notes-generator",
-    "@semantic-release/npm",
     "@semantic-release/github",
     [
       "@semantic-release/git",
