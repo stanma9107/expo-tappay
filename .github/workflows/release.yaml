@@ -1,4 +1,4 @@
-name: Publish Package to npmjs
+name: Release
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - dev
     
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
