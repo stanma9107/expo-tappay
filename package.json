@@ -29,6 +29,7 @@
   "license": "MIT",
   "homepage": "https://github.com/stanma9107/expo-tappay#readme",
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/react": "~18.3.12",
     "expo": "~52.0.0",
