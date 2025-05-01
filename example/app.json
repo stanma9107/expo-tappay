@@ -25,6 +25,23 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "../app.plugin.js",
+        {
+          "applePay": {
+            "enable": true,
+            "merchantId": "merchant.lava.hwstud.io"
+          },
+          "linePay": {
+            "enable": true
+          },
+          "generic": {
+            "enable": true
+          }
+        }
+      ]
+    ]
   }
 }
