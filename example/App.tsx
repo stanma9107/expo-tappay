@@ -1,3 +1,4 @@
+import * as Linking from "expo-linking"
 import Tappay from "expo-tappay";
 import { useEffect } from "react";
 import {
@@ -113,6 +114,43 @@ export default function App() {
                 "Line Pay Availability",
                 isAvailable ? "Available" : "Not Available",
               );
+            }}
+          />
+          <Button
+            title="Install Line APP"
+            onPress={async () => {
+              tappay.linePay.install();
+            }}
+          />
+          <Button
+            title="Setup Line Pay Callback"
+            onPress={async () => {
+              const url = Linking.createURL("/");
+              tappay.linePay.setupCallback(url);
+            }}
+          />
+          <Button
+            title="Get Line Pay Prime Token"
+            onPress={async () => {
+              try {
+                const primeToken = await tappay.linePay.getPrimeToken();
+                Alert.alert("Line Pay Prime Token", primeToken);
+              } catch (error) {
+                console.log(error);
+              }
+            }}
+          />
+          <Button
+            title="Start Line Pay Payment"
+            onPress={async () => {
+              Alert.prompt("Payment URL", undefined, async (paymentUrl) => {
+                try {
+                  const result = await tappay.linePay.startPayment(paymentUrl);
+                  console.log(result);
+                } catch (error) {
+                  console.log(error);
+                }
+              });
             }}
           />
         </Group>

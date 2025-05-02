@@ -2,7 +2,7 @@
 // Description       : Apple Pay payment provider
 // Copyright         : 2025 Stan Ma
 
-import { UnavailabilityError } from "expo-module-scripts";
+import { UnavailabilityError } from "expo-modules-core";
 import type { EventSubscription } from "expo-modules-core";
 
 import ExpoTappayModule from "../ExpoTappayModule";
@@ -21,7 +21,10 @@ export class ApplePay extends BasePaymentProvider {
     params: ApplePayTypes.SetupMerchantParams,
   ): Promise<void> {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.setupApplePayMerchant(
@@ -39,7 +42,10 @@ export class ApplePay extends BasePaymentProvider {
    */
   public async showSetupView(): Promise<void> {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.showApplePaySetupView();
@@ -50,7 +56,10 @@ export class ApplePay extends BasePaymentProvider {
    */
   private async clearCart(): Promise<void> {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.clearApplePayCart();
@@ -61,7 +70,10 @@ export class ApplePay extends BasePaymentProvider {
    */
   private async addItemToCart(name: string, amount: number): Promise<void> {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addItemToApplePayCart(name, amount);
@@ -72,7 +84,10 @@ export class ApplePay extends BasePaymentProvider {
    */
   public startPayment(cartItems: ApplePayTypes.ApplePayPaymentItem[]): void {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     this.clearCart();
@@ -88,7 +103,10 @@ export class ApplePay extends BasePaymentProvider {
    */
   public async showResult(isSuccess: boolean): Promise<void> {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.showApplePayResult(isSuccess);
@@ -101,7 +119,10 @@ export class ApplePay extends BasePaymentProvider {
     listener: (data: ApplePayTypes.OnReceivePrimeEvent) => void,
   ): EventSubscription {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addListener("onReceivePrime", listener);
@@ -114,7 +135,10 @@ export class ApplePay extends BasePaymentProvider {
     listener: (data: ApplePayTypes.OnApplePayGeneralEvent) => void,
   ): EventSubscription {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addListener("onApplePayStart", listener);
@@ -127,7 +151,10 @@ export class ApplePay extends BasePaymentProvider {
     listener: (data: ApplePayTypes.OnApplePayGeneralEvent) => void,
   ): EventSubscription {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addListener("onApplePayCancel", listener);
@@ -140,7 +167,10 @@ export class ApplePay extends BasePaymentProvider {
     listener: (data: ApplePayTypes.OnApplePayTransactionEvent) => void,
   ): EventSubscription {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addListener("onApplePaySuccess", listener);
@@ -153,7 +183,10 @@ export class ApplePay extends BasePaymentProvider {
     listener: (data: ApplePayTypes.OnApplePayTransactionEvent) => void,
   ): EventSubscription {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addListener("onApplePayFailed", listener);
@@ -166,7 +199,10 @@ export class ApplePay extends BasePaymentProvider {
     listener: (data: ApplePayTypes.OnApplePayTransactionEvent) => void,
   ): EventSubscription {
     if (!this.isAvailable()) {
-      throw new UnavailabilityError("Apple Pay is not available");
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Apple Pay is not available",
+      );
     }
 
     return ExpoTappayModule.addListener("onApplePayFinished", listener);
