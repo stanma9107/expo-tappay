@@ -133,5 +133,35 @@ public class ExpoTappayModule: Module {
         Function("showApplePayResult") { (isSuccess: Bool) in
             applePay.showPaymentResult(isSuccess)
         }
+
+        // TODO: Get Generic Prime
+        AsyncFunction("getGenericPrime") { (cardNumber: String, ccv: String, expiryMonth: String, expiryYear: String, promise: Promise) in
+            let card: TPDCard = TPDCard.setWithCardNumber(cardNumber, withDueMonth: expiryMonth, withDueYear: expiryYear, withCCV: ccv)
+            card
+                .onSuccessCallback{ (prime, cardInfo, cardIdentifier, merchantReferenceInfo) in
+                    if
+                        let directPayPrime = prime, directPayPrime != "",
+                        let creditCardInfo = cardInfo,
+                        let creditCardIdentifier = cardIdentifier
+                    {
+                        promise.resolve([
+                            "prime": directPayPrime,
+                            "binCode": creditCardInfo.bincode ?? "",
+                            "lastFour": creditCardInfo.lastFour ?? "",
+                            "issuer": creditCardInfo.issuer ?? "",
+                            "type": creditCardInfo.cardType,
+                            "funding": creditCardInfo.funding,
+                            "cardIdentifier": creditCardIdentifier
+                        ])
+                    } else {
+                        promise.reject("NO_PRIME", "PRIME IS EMPTY")
+                    }
+
+                }
+                .onFailureCallback{ (status, message) in
+                    promise.reject(String(status), message)
+                }
+                .createToken(withGeoLocation: "UNKNOWN")
+        }
     }
 }
