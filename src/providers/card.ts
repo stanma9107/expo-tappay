@@ -2,6 +2,8 @@
 // Description       : Card payment provider
 // Copyright         : 2025 Stan Ma
 
+import { UnavailabilityError } from "expo-modules-core";
+
 import ExpoTappayModule from "../ExpoTappayModule";
 import { BasePaymentProvider } from "./base";
 import * as GenericTypes from "../types/generic.types";
@@ -17,6 +19,13 @@ export class GenericPay extends BasePaymentProvider {
   public async getPrime(
     params: GenericTypes.GetPrimeParams,
   ): Promise<GenericTypes.PrimeResult> {
+    if (!this.isAvailable()) {
+      throw new UnavailabilityError(
+        "expo-tappay",
+        "Generic Pay is not available",
+      );
+    }
+
     return ExpoTappayModule.getGenericPrime(
       params.cardNumber,
       params.ccv,
