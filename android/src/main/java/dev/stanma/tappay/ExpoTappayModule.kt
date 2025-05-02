@@ -115,11 +115,9 @@ class ExpoTappayModule : Module() {
               "funding" to cardInfo.funding,
               "cardIdentifier" to cardIdentifier
             )
-    Function("setupLinePayCallbackUrl") { callbackUrl: String ->
-      linePay = TPDLinePay(appContext.reactContext, callbackUrl)
-    }
 
             promise.resolve(primeData)
+          }
           .onFailureCallback { status, reportMsg ->
             promise.reject(status.toString(), reportMsg, Exception(reportMsg))
           }
@@ -128,7 +126,11 @@ class ExpoTappayModule : Module() {
         promise.reject("ERROR", e.message, e)
       }
     }
-          }
+
+    Function("setupLinePayCallbackUrl") { callbackUrl: String ->
+      linePay = TPDLinePay(appContext.reactContext, callbackUrl)
+    }
+
     AsyncFunction("getLinePayPrimeToken") { promise: Promise ->
       if (linePay != null) {
         linePay!!
