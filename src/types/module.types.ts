@@ -6,6 +6,7 @@ import { NativeModule } from "expo";
 
 import * as ApplePayTypes from "./applePay.types";
 import { TPDServerType } from "./config.types";
+import * as GenericTypes from "./generic.types";
 
 export type ExpoTappayModuleEvents = {
   onApplePayStart: (data: ApplePayTypes.OnApplePayGeneralEvent) => void;
@@ -53,4 +54,12 @@ export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvent
 
   // TODO: Show Result to Apple Pay
   showApplePayResult(isSuccess: boolean): void;
+
+  // TODO: Get Generic Prime
+  getGenericPrime(
+    cardNumber: string,
+    ccv: string,
+    expiryMonth: string,
+    expiryYear: string,
+  ): Promise<GenericTypes.PrimeResult>;
 }

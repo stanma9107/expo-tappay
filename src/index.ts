@@ -5,3 +5,4 @@
 import { Tappay } from "./core/tappay";
 
 export default Tappay;
+export type { CardFunding, CardType } from "./types/generic.types";
