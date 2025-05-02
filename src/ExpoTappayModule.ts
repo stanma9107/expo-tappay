@@ -1,12 +1,9 @@
-import { NativeModule, requireNativeModule } from 'expo';
+// File Name         : ExpoTappay/src/ExpoTappayModule.ts
+// Description       : Expo Module to integrate with Third-Party Payment Service Provider (Tappay)
+// Copyright         : 2025 Stan Ma
 
-import { ExpoTappayModuleEvents } from './ExpoTappay.types';
+import { requireNativeModule } from "expo";
 
-declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvents> {
-  PI: number;
-  hello(): string;
-  setValueAsync(value: string): Promise<void>;
-}
+import { ExpoTappayModule } from "./types/module.types";
 
-// This call loads the native module object from the JSI.
-export default requireNativeModule<ExpoTappayModule>('ExpoTappay');
+export default requireNativeModule<ExpoTappayModule>("ExpoTappay");

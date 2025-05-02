@@ -1,6 +1,6 @@
 {
   "name": "expo-tappay",
-  "version": "0.1.0",
+  "version": "1.0.0-dev.3",
   "description": "The Expo Module to Integrate with Tappay Payments",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -9,7 +9,7 @@
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
-    "prepare": "expo-module prepare",
+    "prepare": "husky install && expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
@@ -28,16 +28,20 @@
   "author": "Stan <stanma789@gmail.com> (github.com/stanma9107)",
   "license": "MIT",
   "homepage": "https://github.com/stanma9107/expo-tappay#readme",
-  "dependencies": {},
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/react": "~18.3.12",
-    "expo-module-scripts": "^4.0.4",
     "expo": "~52.0.0",
-    "react-native": "0.76.0"
+    "expo-module-scripts": "^4.0.4",
+    "husky": "^9.1.7",
+    "react-native": "0.76.0",
+    "semantic-release": "^24.2.3"
   },
   "peerDependencies": {
     "expo": "*",
     "react": "*",
     "react-native": "*"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

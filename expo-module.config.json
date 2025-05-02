@@ -1,12 +1,14 @@
 {
   "platforms": [
     "apple",
-    "android",
-    "web"
+    "android"
   ],
   "apple": {
     "modules": [
       "ExpoTappayModule"
+    ],
+    "appDelegateSubscribers": [
+      "ExpoTappayLinePayLifecycleDelegate"
     ]
   },
   "android": {
