@@ -7,6 +7,7 @@ import { NativeModule } from "expo";
 import * as ApplePayTypes from "./applePay.types";
 import { TPDServerType } from "./config.types";
 import * as GenericTypes from "./generic.types";
+import * as LinePayTypes from "./linePay.types";
 
 export type ExpoTappayModuleEvents = {
   onApplePayStart: (data: ApplePayTypes.OnApplePayGeneralEvent) => void;
@@ -62,4 +63,16 @@ export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvent
     expiryMonth: string,
     expiryYear: string,
   ): Promise<GenericTypes.PrimeResult>;
+
+  // TODO: Install Line APP
+  installLineApp(): void;
+
+  // TODO: Setup Line Pay Callback URL
+  setupLinePayCallbackUrl(url: string): void;
+
+  // TODO: Get Line Pay Prime Token
+  getLinePayPrimeToken(): Promise<string>;
+
+  // TODO: Start Line Pay Payment
+  startLinePayPayment(paymentUrl: string): Promise<LinePayTypes.PaymentResult>;
 }
