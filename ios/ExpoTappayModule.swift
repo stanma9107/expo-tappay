@@ -43,6 +43,9 @@ public class ExpoTappayModule: Module {
         var applePay: TPDApplePay!
         var cart: TPDCart = TPDCart()
         
+        // Line Pay
+        var linePay: TPDLinePay? = nil
+        
         Events(APPLE_PAY_START_EVENT_NAME)
         Events(APPLE_PAY_CANCEL_EVENT_NAME)
         Events(APPLE_PAY_SUCCESS_EVENT_NAME)
@@ -162,6 +165,50 @@ public class ExpoTappayModule: Module {
                     promise.reject(String(status), message)
                 }
                 .createToken(withGeoLocation: "UNKNOWN")
+        }
+        
+        // TODO: Install Line Application
+        Function("installLineApp") {
+            TPDLinePay.installLineApp()
+        }
+        
+        // TODO: Setup Line Pay Callback
+        Function("setupLinePayCallbackUrl") {(url: String) in
+            linePay = TPDLinePay.setup(withReturnUrl: url)
+        }
+        
+        // TODO: Get Line Pay Prime Token
+        AsyncFunction("getLinePayPrimeToken") {(promise: Promise) in
+            if (linePay != nil) {
+                linePay?
+                    .onSuccessCallback{(Prime) in
+                        promise.resolve(Prime)
+                    }
+                    .onFailureCallback{(status, msg) in
+                        promise.reject(String(status), msg)
+                    }
+                    .getPrime()
+            }
+            promise.reject("NOT_READY", "Please Setup Callback URL First.")
+        }
+        
+        // TODO: Redirect & Get Payment Result
+        AsyncFunction("startLinePayPayment") {(paymentUrl: String, promise: Promise) in
+            if (linePay != nil) {
+                DispatchQueue.main.async {
+                    let viewController = UIViewController()
+                    linePay?.redirect(paymentUrl, with: viewController, completion: {(result) in
+                        promise.resolve([
+                            "status": result.status,
+                            "recTradeId": result.recTradeId!,
+                            "orderNumber": result.orderNumber!,
+                            "bankTransactionId": result.bankTransactionId!
+                        ])
+                    })
+                }
+            } else {
+                promise.reject("NOT_READY", "Please Setup Callback URL First.")
+            }
         }
     }
 }

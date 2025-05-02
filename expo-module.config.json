@@ -6,6 +6,9 @@
   "apple": {
     "modules": [
       "ExpoTappayModule"
+    ],
+    "appDelegateSubscribers": [
+      "ExpoTappayLinePayLifecycleDelegate"
     ]
   },
   "android": {
