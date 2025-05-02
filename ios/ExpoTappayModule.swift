@@ -188,8 +188,9 @@ public class ExpoTappayModule: Module {
                         promise.reject(String(status), msg)
                     }
                     .getPrime()
+            } else {
+                promise.reject("NOT_READY", "Please Setup Callback URL First.")
             }
-            promise.reject("NOT_READY", "Please Setup Callback URL First.")
         }
         
         // TODO: Redirect & Get Payment Result
