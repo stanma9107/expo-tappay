@@ -4,7 +4,7 @@
 
 import ExpoTappayModule from "../ExpoTappayModule";
 import { BasePaymentProvider } from "./base";
-import * as LinePayTypes from "../types/linePay.types";
+import type * as LinePayTypes from "../types/linePay.types";
 
 export class LinePay extends BasePaymentProvider {
   public async isAvailable(): Promise<boolean> {
