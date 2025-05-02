@@ -50,6 +50,22 @@ export default function App() {
               );
             }}
           />
+          <Button
+            title="Get Generic Prime"
+            onPress={async () => {
+              try {
+                const prime = await tappay.generic.getPrime({
+                  cardNumber: "4242424242424242",
+                  ccv: "123",
+                  expiryMonth: "01",
+                  expiryYear: "28",
+                });
+                console.log(prime);
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          />
         </Group>
         <Group name="Apple Pay">
           <Button
