@@ -13,15 +13,21 @@ import expo.modules.kotlin.modules.ModuleDefinition
 import tech.cherri.tpdirect.api.TPDLinePay
 import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.types.Enumerable
+import tech.cherri.tpdirect.api.TPDLinePayResult
 import tech.cherri.tpdirect.api.TPDServerType
 import tech.cherri.tpdirect.api.TPDSetup
 import tech.cherri.tpdirect.api.TPDCard
+import tech.cherri.tpdirect.callback.TPDLinePayResultListener
 
 class ExpoTappayModule : Module() {
 
   private lateinit var context: Context
   private var applicationInfo: ApplicationInfo? = null
   private var supportPayments: List<String> = emptyList()
+
+  // Line Pay
+  private var linePay: TPDLinePay? = null
+  private var linePayPromise: Promise? = null
 
   override fun definition() = ModuleDefinition {
     Name("ExpoTappay")
@@ -30,6 +36,40 @@ class ExpoTappayModule : Module() {
       context = appContext.reactContext ?: throw Exceptions.ReactContextLost()
       applicationInfo = context.packageManager?.getApplicationInfo(context.packageName.toString(), PackageManager.GET_META_DATA)
       supportPayments = applicationInfo?.metaData?.getString("TPDSupportPayments")?.split(",") ?: emptyList()
+    }
+
+    OnNewIntent {
+      if (linePayPromise == null) {
+        return@OnNewIntent
+      }
+
+      if (linePay != null) {
+        linePay!!.parseToLinePayResult(appContext.reactContext, it.data, object :
+          TPDLinePayResultListener {
+          override fun onParseSuccess(result: TPDLinePayResult?) {
+            if (result == null) {
+              linePayPromise?.reject("PAYMENT_FAILED", "NO_RESULT", Exception("NO_RESULT"))
+              linePayPromise = null
+              return
+            }
+            linePayPromise?.resolve(mapOf(
+              "status" to result.status,
+              "recTradeId" to result.recTradeId,
+              "orderNumber" to result.orderNumber,
+              "bankTransactionId" to result.bankTransactionId,
+            ))
+            linePayPromise = null
+          }
+
+          override fun onParseFail(statusCode: Int, msg: String?) {
+            linePayPromise?.reject(statusCode.toString(), msg, Exception(msg))
+            linePayPromise = null
+          }
+        })
+      } else {
+        linePayPromise?.reject("NOT_READY", "Please Setup Callback URL First.", Exception("Please Setup Callback URL First."))
+        linePayPromise = null
+      }
     }
 
     Function("isGenericAvailable") {
@@ -75,15 +115,38 @@ class ExpoTappayModule : Module() {
               "funding" to cardInfo.funding,
               "cardIdentifier" to cardIdentifier
             )
+    Function("setupLinePayCallbackUrl") { callbackUrl: String ->
+      linePay = TPDLinePay(appContext.reactContext, callbackUrl)
+    }
 
             promise.resolve(primeData)
-          }
           .onFailureCallback { status, reportMsg ->
             promise.reject(status.toString(), reportMsg, Exception(reportMsg))
           }
           .createToken("UNKNOWN")
       } catch (e: Exception) {
         promise.reject("ERROR", e.message, e)
+      }
+    }
+          }
+    AsyncFunction("getLinePayPrimeToken") { promise: Promise ->
+      if (linePay != null) {
+        linePay!!
+          .getPrime(
+            { prime -> promise.resolve(prime) },
+            { statusCode, statusMessage -> promise.reject(statusCode.toString(), statusMessage, Exception(statusMessage)) }
+          )
+      } else {
+        promise.reject("NOT_READY", "Please Setup Callback URL First.", Exception("Please Setup Callback URL First."))
+      }
+    }
+
+    AsyncFunction("startLinePayPayment") { paymentUrl: String, promise: Promise ->
+      if (linePay != null) {
+        linePayPromise = promise
+        linePay!!.redirectWithUrl(paymentUrl)
+      } else {
+        promise.reject("NOT_READY", "Please Setup Callback URL First.", Exception("Please Setup Callback URL First."))
       }
     }
   }
