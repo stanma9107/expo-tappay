@@ -7,6 +7,7 @@ package dev.stanma.tappay
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import expo.modules.kotlin.Promise
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import tech.cherri.tpdirect.api.TPDLinePay
@@ -14,6 +15,7 @@ import expo.modules.kotlin.exception.Exceptions
 import expo.modules.kotlin.types.Enumerable
 import tech.cherri.tpdirect.api.TPDServerType
 import tech.cherri.tpdirect.api.TPDSetup
+import tech.cherri.tpdirect.api.TPDCard
 
 class ExpoTappayModule : Module() {
 
@@ -54,7 +56,36 @@ class ExpoTappayModule : Module() {
       )
     }
 
+    AsyncFunction("getGenericPrime") { cardNumber: String, ccv: String, expiryMonth: String, expiryYear: String, promise: Promise ->
+      try {
+        TPDCard(
+          appContext.reactContext,
+          StringBuffer(cardNumber),
+          StringBuffer(expiryMonth),
+          StringBuffer(expiryYear),
+          StringBuffer(ccv),
+        )
+          .onSuccessCallback { prime, cardInfo, cardIdentifier, _ ->
+            val primeData = mapOf(
+              "prime" to prime,
+              "binCode" to cardInfo.bincode,
+              "lastFour" to cardInfo.lastFour,
+              "issuer" to cardInfo.issuer,
+              "type" to cardInfo.cardType,
+              "funding" to cardInfo.funding,
+              "cardIdentifier" to cardIdentifier
+            )
 
+            promise.resolve(primeData)
+          }
+          .onFailureCallback { status, reportMsg ->
+            promise.reject(status.toString(), reportMsg, Exception(reportMsg))
+          }
+          .createToken("UNKNOWN")
+      } catch (e: Exception) {
+        promise.reject("ERROR", e.message, e)
+      }
+    }
   }
 }
 
