@@ -12,5 +12,5 @@ export abstract class BasePaymentProvider {
   }
 
   // TODO: Check if the payment provider is available
-  public abstract isAvailable(): Promise<boolean>;
+  public abstract isAvailable(): boolean;
 }
