@@ -9,7 +9,7 @@ import { BasePaymentProvider } from "./base";
 import * as GenericTypes from "../types/generic.types";
 
 export class GenericPay extends BasePaymentProvider {
-  public async isAvailable(): Promise<boolean> {
+  public isAvailable(): boolean {
     return ExpoTappayModule.isGenericAvailable();
   }
 

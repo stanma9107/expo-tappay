@@ -71,7 +71,12 @@ public class ExpoTappayModule: Module {
         
         // TODO: Check If Apple Pay Available
         Function("isApplePayAvailable") {
-            return supportPayments.contains("applePay") && TPDApplePay.canMakePayments()
+            return supportPayments.contains("applePay")
+        }
+
+        // TODO: Check If Apple Pay Can Make Payments
+        Function("applePayCanMakePayments") {
+            return TPDApplePay.canMakePayments()
         }
         
         // TODO: Setup Apple Pay Merchant

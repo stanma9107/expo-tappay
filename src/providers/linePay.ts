@@ -3,14 +3,13 @@
 // Copyright         : 2025 Stan Ma
 
 import { UnavailabilityError } from "expo-modules-core";
-import { Platform } from "react-native";
 
 import ExpoTappayModule from "../ExpoTappayModule";
 import { BasePaymentProvider } from "./base";
 import type * as LinePayTypes from "../types/linePay.types";
 
 export class LinePay extends BasePaymentProvider {
-  public async isAvailable(): Promise<boolean> {
+  public isAvailable(): boolean {
     return ExpoTappayModule.isLinePayAvailable();
   }
 
@@ -20,13 +19,6 @@ export class LinePay extends BasePaymentProvider {
   public install() {
     if (!this.isAvailable()) {
       throw new UnavailabilityError("expo-tappay", "Line Pay is not available");
-    }
-
-    if (Platform.OS !== "ios") {
-      throw new UnavailabilityError(
-        "expo-tappay",
-        "This method only works on iOS",
-      );
     }
 
     ExpoTappayModule.installLineApp();

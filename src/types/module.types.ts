@@ -23,13 +23,16 @@ export declare class ExpoTappayModule extends NativeModule<ExpoTappayModuleEvent
   setup(appId: number, appKey: string, serverType: TPDServerType): void;
 
   // TODO: Check if Generic Pay is available
-  isGenericAvailable(): Promise<boolean>;
+  isGenericAvailable(): boolean;
 
   // TODO: Check if Line Pay is available
-  isLinePayAvailable(): Promise<boolean>;
+  isLinePayAvailable(): boolean;
 
   // TODO: Check if Apple Pay is available
-  isApplePayAvailable(): Promise<boolean>;
+  isApplePayAvailable(): boolean;
+
+  // TODO: Check if Apple Pay can make payments
+  applePayCanMakePayments(): boolean;
 
   // TODO: Setup Apple Pay Merchant
   setupApplePayMerchant(

@@ -10,8 +10,12 @@ import { BasePaymentProvider } from "./base";
 import type * as ApplePayTypes from "../types/applePay.types";
 
 export class ApplePay extends BasePaymentProvider {
-  public async isAvailable(): Promise<boolean> {
+  public isAvailable(): boolean {
     return ExpoTappayModule.isApplePayAvailable();
+  }
+
+  public canMakePayments(): boolean {
+    return ExpoTappayModule.applePayCanMakePayments();
   }
 
   /**
