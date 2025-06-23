@@ -80,6 +80,10 @@ class ExpoTappayModule : Module() {
       return@Function false
     }
 
+    Function("applePayCanMakePayments") {
+      return@Function false
+    }
+
     Function("isLinePayAvailable") {
       return@Function supportPayments.contains("linePay") && TPDLinePay.isLinePayAvailable(appContext.reactContext)
     }
