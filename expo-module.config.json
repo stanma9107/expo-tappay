@@ -14,6 +14,12 @@
   "android": {
     "modules": [
       "dev.stanma.tappay.ExpoTappayModule"
+    ],
+    "gradleAarProjects": [
+      {
+        "name": "tappay-android-aar",
+        "aarFilePath": "android/libs/tpdirect-3.10.0.aar"
+      }
     ]
   }
 }
