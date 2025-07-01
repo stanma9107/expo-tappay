@@ -11,6 +11,6 @@ export abstract class BasePaymentProvider {
     this.config = config;
   }
 
-  // TODO: Check if the payment provider is available
-  public abstract isAvailable(): boolean;
+  // Check if the payment provider is available
+  public abstract isAvailable: boolean;
 }

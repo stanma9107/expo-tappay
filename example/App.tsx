@@ -1,4 +1,4 @@
-import * as Linking from "expo-linking"
+import * as Linking from "expo-linking";
 import Tappay from "expo-tappay";
 import { useEffect } from "react";
 import {
@@ -18,7 +18,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (tappay.applePay.isAvailable()) {
+    if (tappay.applePay.isAvailable) {
       const primeListener = tappay.applePay.addRecievePrimeListener((data) => {
         if (data.success) {
           console.log(data.prime);
@@ -46,10 +46,9 @@ export default function App() {
           <Button
             title="Check Generic Availability"
             onPress={async () => {
-              const isAvailable = await tappay.generic.isAvailable();
               Alert.alert(
                 "Generic Availability",
-                isAvailable ? "Available" : "Not Available",
+                tappay.generic.isAvailable ? "Available" : "Not Available",
               );
             }}
           />
@@ -74,10 +73,9 @@ export default function App() {
           <Button
             title="Check Apple Pay Availability"
             onPress={async () => {
-              const isAvailable = tappay.applePay.isAvailable();
               Alert.alert(
                 "Apple Pay Availability",
-                isAvailable ? "Available" : "Not Available",
+                tappay.applePay.isAvailable ? "Available" : "Not Available",
               );
             }}
           />
@@ -111,10 +109,9 @@ export default function App() {
           <Button
             title="Check Line Pay Availability"
             onPress={async () => {
-              const isAvailable = tappay.linePay.isAvailable();
               Alert.alert(
                 "Line Pay Availability",
-                isAvailable ? "Available" : "Not Available",
+                tappay.linePay.isAvailable ? "Available" : "Not Available",
               );
             }}
           />

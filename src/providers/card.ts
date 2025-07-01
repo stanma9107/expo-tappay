@@ -6,10 +6,10 @@ import { UnavailabilityError } from "expo-modules-core";
 
 import ExpoTappayModule from "../ExpoTappayModule";
 import { BasePaymentProvider } from "./base";
-import * as GenericTypes from "../types/generic.types";
+import type * as GenericTypes from "../types/generic.types";
 
 export class GenericPay extends BasePaymentProvider {
-  public isAvailable(): boolean {
+  public get isAvailable(): boolean {
     return ExpoTappayModule.isGenericAvailable();
   }
 
@@ -19,7 +19,7 @@ export class GenericPay extends BasePaymentProvider {
   public async getPrime(
     params: GenericTypes.GetPrimeParams,
   ): Promise<GenericTypes.PrimeResult> {
-    if (!this.isAvailable()) {
+    if (!this.isAvailable) {
       throw new UnavailabilityError(
         "expo-tappay",
         "Generic Pay is not available",
