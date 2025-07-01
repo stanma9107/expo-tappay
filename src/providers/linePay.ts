@@ -2,14 +2,14 @@
 // Description       : Line Pay payment provider
 // Copyright         : 2025 Stan Ma
 
-import { UnavailabilityError } from "expo-modules-core";
+import { Platform, UnavailabilityError } from "expo-modules-core";
 
 import ExpoTappayModule from "../ExpoTappayModule";
 import { BasePaymentProvider } from "./base";
 import type * as LinePayTypes from "../types/linePay.types";
 
 export class LinePay extends BasePaymentProvider {
-  public isAvailable(): boolean {
+  public get isAvailable(): boolean {
     return ExpoTappayModule.isLinePayAvailable();
   }
 
@@ -17,8 +17,12 @@ export class LinePay extends BasePaymentProvider {
    * Install Line APP (Only for iOS)
    */
   public install() {
-    if (!this.isAvailable()) {
+    if (!this.isAvailable) {
       throw new UnavailabilityError("expo-tappay", "Line Pay is not available");
+    }
+
+    if (Platform.OS === "android") {
+      throw new UnavailabilityError("expo-tappay", " linePay.install()");
     }
 
     ExpoTappayModule.installLineApp();
@@ -29,7 +33,7 @@ export class LinePay extends BasePaymentProvider {
    * @param url
    */
   public setupCallback(url: string) {
-    if (!this.isAvailable()) {
+    if (!this.isAvailable) {
       throw new UnavailabilityError("expo-tappay", "Line Pay is not available");
     }
 
@@ -40,7 +44,7 @@ export class LinePay extends BasePaymentProvider {
    * Get Line Pay Prime Token
    */
   public async getPrimeToken(): Promise<string> {
-    if (!this.isAvailable()) {
+    if (!this.isAvailable) {
       throw new UnavailabilityError("expo-tappay", "Line Pay is not available");
     }
 
@@ -54,7 +58,7 @@ export class LinePay extends BasePaymentProvider {
   public async startPayment(
     paymentUrl: string,
   ): Promise<LinePayTypes.PaymentResult> {
-    if (!this.isAvailable()) {
+    if (!this.isAvailable) {
       throw new UnavailabilityError("expo-tappay", "Line Pay is not available");
     }
 
