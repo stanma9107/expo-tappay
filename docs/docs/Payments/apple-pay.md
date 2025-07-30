@@ -50,7 +50,7 @@ import Tappay from "expo-tappay";
 
 const tappay = new Tappay({
   appId: 11340, // replace with your Tappay App ID
-  appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC",
+  appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC", // replace with your Tappay App Key
   serverType: "sandbox",
 });
 ```
@@ -58,6 +58,8 @@ const tappay = new Tappay({
 ### Checking Apple Pay Availability
 
 Checks if Apple Pay is available and properly configured on the device
+
+`return: boolean`
 
 ```js
 
@@ -73,6 +75,8 @@ if (tappay.applePay.isAvailable) {
 
 This method opens the Apple Pay setup screen.
 
+`return: void`
+
 ```js
 tappay.applePay.showSetupView();
 ```
@@ -87,6 +91,8 @@ Call startPayment() to initiate the Apple Pay payment flow.
 |-----------|------|-------------|
 | items | [CartItem](#CartItem)[] | Array of cart items to be processed for payment |
 
+`return: void`
+
 ```js
 tappay.applePay.startPayment(items);
 ```
@@ -99,7 +105,7 @@ You must use showResult function to display the result in the user interface.
 
 Transaction result status (true = success, false = failure)
 
-
+`return: void`
 
 ```js
 tappay.applePay.showResult(boolean);
@@ -109,6 +115,8 @@ tappay.applePay.showResult(boolean);
 ### Receive Prime Listener
 
 [Event Type](#PrimeListener)
+
+`return: EventSubscription`
 
 ```js
 tappay.applePay.addRecievePrimeListener((event) => {
@@ -120,6 +128,8 @@ tappay.applePay.addRecievePrimeListener((event) => {
 
 [Payload Type](#GeneralEvent)
 
+`return: EventSubscription`
+
 ```js
 tappay.applePay.addStartListener((payload) => {
   // Apple Pay transaction started
@@ -129,6 +139,8 @@ tappay.applePay.addStartListener((payload) => {
 ### Apple Pay Cancel Listener
 
 [Payload Type](#GeneralEvent)
+
+`return: EventSubscription`
 
 ```js
 tappay.applePay.addCancelListener((payload) => {
@@ -140,6 +152,8 @@ tappay.applePay.addCancelListener((payload) => {
 
 [Payload Type](#GeneralEvent)
 
+`return: EventSubscription`
+
 ```js
 tappay.applePay.addFinishedListener((payload) => {
   // Apple Pay transaction finished
@@ -150,6 +164,8 @@ tappay.applePay.addFinishedListener((payload) => {
 
 [Payload Type](#TransactionEvent)
 
+`return: EventSubscription`
+
 ```js
 tappay.applePay.addSuccessListener((payload) => {
   // Apple Pay transaction successful
@@ -159,6 +175,9 @@ tappay.applePay.addSuccessListener((payload) => {
 ### Apple Pay Failed Listener
 
 [Payload Type](#TransactionEvent)
+
+`return: EventSubscription`
+
 ```js
 tappay.applePay.addFailedListener((payload) => {
   // Apple Pay transaction failed
@@ -166,6 +185,9 @@ tappay.applePay.addFailedListener((payload) => {
 ```
 
 ### Remove Listener 
+
+`return: void`
+
 ```js
 import ApplePay from "expo-tappay-apple-pay";
 import { EventSubscription } from "expo-modules-core";

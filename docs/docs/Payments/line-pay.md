@@ -47,7 +47,7 @@ import Tappay from "expo-tappay";
 
 const tappay = new Tappay({
   appId: 11340, // replace with your Tappay App ID
-  appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC",
+  appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC", // replace with your Tappay App Key
   serverType: "sandbox",
 });
 ```
@@ -56,7 +56,7 @@ const tappay = new Tappay({
 
 Checks if Line Pay is available and properly configured on the device
 
-return: boolean
+`return: boolean`
 
 ```js
 
@@ -72,7 +72,7 @@ if (tappay.linePay.isAvailable) {
 
 This method installs Line Pay.
 
-return: void
+`return: void`
 
 ```js
 tappay.linePay.install();
@@ -82,7 +82,7 @@ tappay.linePay.install();
 
 Call getPrimeToken() to get the prime token. 
 
-return: Promise<[string](#string)>
+`return: Promise<string>`
 
 ```js
 tappay.linePay.getPrimeToken();
@@ -94,7 +94,13 @@ You must use setupCallback function to setup the callback URL.
 
 **IMPORTANT: If setupCallback() is not called, the payment will not be successful.**
 
-return: void
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| callbackUrl | string | The callback URL |
+
+`return: void`
 
 ```js
 import * as Linking from "expo-linking";
@@ -108,7 +114,15 @@ tappay.linePay.setupCallback(callbackUrl);
 
 Call startPayment() to start the payment.
 
-return: Promise<[PaymentResult](#PaymentResult)>
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| paymentUrl | string | The payment URL |
+
+[PaymentResult](#PaymentResult)
+
+`return: Promise<PaymentResult>`
 
 ```js
 tappay.linePay.startPayment("{Payment_URL}");
