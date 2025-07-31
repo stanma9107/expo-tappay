@@ -24,15 +24,27 @@ jobs:
         run: |
           cd docs
           npm ci
+      - name: Debug environment variables
+        run: |
+          echo "ORGANIZATION_NAME: ${{ vars.ORGANIZATION_NAME }}"
+          echo "PROJECT_NAME: ${{ vars.PROJECT_NAME }}"
+          echo "URL: ${{ vars.URL }}"
+          echo "REPO_URL: ${{ vars.REPO_URL }}"
       - name: Build website
         run: |
           cd docs
           npm run build
-
+        env:
+          ORGANIZATION_NAME: ${{ vars.ORGANIZATION_NAME }}
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          URL: ${{ vars.URL }}
+          REPO_URL: ${{ vars.REPO_URL }}
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/build
+    environment:
+      name: github-pages
 
   deploy:
     name: Deploy to GitHub Pages
