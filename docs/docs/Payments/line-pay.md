@@ -72,6 +72,8 @@ if (tappay.linePay.isAvailable) {
 
 This method installs Line Pay.
 
+**IMPORTANT: This method only available for iOS cause the Tappay native dependency limitation.**
+
 `return: void`
 
 ```js
@@ -113,6 +115,8 @@ tappay.linePay.setupCallback(callbackUrl);
 ### Start Payment
 
 Call startPayment() to start the payment.
+
+**IMPORTANT**: First call `getPrimeToken()` to obtain the prime token, then send this token to your [backend server](https://docs.tappaysdk.com/line-pay/en/back.html#response) to generate the payment URL.
 
 **Parameters:**
 

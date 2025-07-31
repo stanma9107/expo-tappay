@@ -109,12 +109,12 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/stanma9107/expo-tappay',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Stan Ma, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Stan Ma. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

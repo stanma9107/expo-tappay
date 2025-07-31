@@ -71,6 +71,21 @@ if (tappay.applePay.isAvailable) {
 
 ```
 
+### Checking Apple Pay Can Make Payments
+
+Checks if Apple Pay can make payments
+
+`return: boolean`
+
+```js
+
+if (tappay.applePay.canMakePayments()) {
+  console.log("Apple Pay can make payments");
+} else {
+  console.log("Apple Pay cannot make payments");
+}
+```
+
 ### Open Apple Pay Setup Screen
 
 This method opens the Apple Pay setup screen.
