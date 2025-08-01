@@ -1,0 +1,270 @@
+# Apple Pay 
+
+## Prerequisites
+- Please create a Tappay account and get the app ID from [Tappay Dashboard](https://accounts.tappaysdk.com/).
+- Create Merchant ID and Apple Pay Certificate from [Apple Developer](https://developer.apple.com/account/resources/identifiers/list/merchant).
+- Integrate your Merchant with Tappay Dashboard.
+- Please add the following config in your app.json
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-tappay", {
+          "applePay":{
+            "enable":true,
+            "merchantId": "YOUR_MERCHANT_ID", // replace with your Merchant ID
+          }
+          // other payment methods...
+        }
+      ]
+    ]
+  }
+}
+```
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| enable | boolean | Whether to enable Apple Pay |
+| merchantId | string | Your Apple Pay merchant identifier registered with Apple |
+
+## Usage
+
+### Setup Tappay 
+
+This method configures the Tappay instance. This setup must be completed before any Apple Pay transaction can be processed.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| appId | number | Your Tappay App ID |
+| appKey | string | Your Tappay App Key |
+| serverType | [ServerType](#ServerType) | Your Tappay Server Type |
+
+### <span id="ServerType">Server Type</span>
+
+- sandbox: for testing
+- production: for production
+
+```js
+import Tappay from "expo-tappay";
+
+const tappay = new Tappay({
+  appId: 11340, // replace with your Tappay App ID
+  appKey: "app_whdEWBH8e8Lzy4N6BysVRRMILYORF6UxXbiOFsICkz0J9j1C0JUlCHv1tVJC", // replace with your Tappay App Key
+  serverType: "sandbox",
+});
+```
+
+### Checking Apple Pay Availability
+
+Checks if Apple Pay is available and properly configured on the device
+
+`return: boolean`
+
+```js
+
+if (tappay.applePay.isAvailable) {
+  console.log("Apple Pay is available");
+} else {
+  console.log("Apple Pay is not available");
+}
+
+```
+
+### Checking Apple Pay Can Make Payments
+
+Checks if Apple Pay can make payments
+
+`return: boolean`
+
+```js
+
+if (tappay.applePay.canMakePayments()) {
+  console.log("Apple Pay can make payments");
+} else {
+  console.log("Apple Pay cannot make payments");
+}
+```
+
+### Open Apple Pay Setup Screen
+
+This method opens the Apple Pay setup screen.
+
+`return: void`
+
+```js
+tappay.applePay.showSetupView();
+```
+
+### Start Apple Pay
+
+Call startPayment() to initiate the Apple Pay payment flow. 
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| items | [CartItem](#CartItem)[] | Array of cart items to be processed for payment |
+
+`return: void`
+
+```js
+tappay.applePay.startPayment(items);
+```
+
+### Show Result
+
+You must use showResult function to display the result in the user interface.
+
+**IMPORTANT: If showResult() is not called, the user interface will continue to show "Processing" and will not complete.**
+
+Transaction result status (true = success, false = failure)
+
+`return: void`
+
+```js
+tappay.applePay.showResult(boolean);
+```
+
+## Listener  
+### Receive Prime Listener
+
+[Event Type](#PrimeListener)
+
+`return: EventSubscription`
+
+```js
+tappay.applePay.addRecievePrimeListener((event) => {
+  //  Handle the result of getting the prime, check if it is successful or failed
+});
+```
+
+### Apple Pay Start Listener
+
+[Payload Type](#GeneralEvent)
+
+`return: EventSubscription`
+
+```js
+tappay.applePay.addStartListener((payload) => {
+  // Apple Pay transaction started
+});
+```
+
+### Apple Pay Cancel Listener
+
+[Payload Type](#GeneralEvent)
+
+`return: EventSubscription`
+
+```js
+tappay.applePay.addCancelListener((payload) => {
+  // Apple Pay transaction cancel
+});
+```
+
+### Apple Pay Finished Listener
+
+[Payload Type](#GeneralEvent)
+
+`return: EventSubscription`
+
+```js
+tappay.applePay.addFinishedListener((payload) => {
+  // Apple Pay transaction finished
+});
+```
+
+### Apple Pay Success Listener
+
+[Payload Type](#TransactionEvent)
+
+`return: EventSubscription`
+
+```js
+tappay.applePay.addSuccessListener((payload) => {
+  // Apple Pay transaction successful
+});
+```
+
+### Apple Pay Failed Listener
+
+[Payload Type](#TransactionEvent)
+
+`return: EventSubscription`
+
+```js
+tappay.applePay.addFailedListener((payload) => {
+  // Apple Pay transaction failed
+});
+```
+
+### Remove Listener 
+
+`return: void`
+
+```js
+import ApplePay from "expo-tappay-apple-pay";
+import { EventSubscription } from "expo-modules-core";
+
+
+const subscription: EventSubscription =  tappay.applePay.addRecievePrimeListener((data) => {});
+
+subscription.remove();
+```
+
+
+## Example
+[ApplePay Example](https://github.com/stanma9107/expo-tappay/blob/2178364f9fe52afcfd27302d5e6ea91c6a5aa9f8/example/App.tsx)
+
+
+## Type
+
+
+### <span id="CartItem">Cart Item Type</span>
+| Key | Value | Description |
+|-----|-------|-------------|
+| name | `string` | Product name to display in Apple Pay sheet |
+| amount | `number` | Product price in cents|
+
+
+### <span id="PrimeListener">Receive Prime Listener Event Type</span>
+
+- OnSuccessReceivePrimeEvent
+  
+| Key | Value | Description |
+|-----|-------|-------------|
+| success | `true` | Indicates the payment was successful |
+| prime | `string` | The payment token generated by Tappay |
+| expiryMillis | `number` | The expiration time of the payment token in milliseconds |
+| totalAmount | `number` | The total amount of the payment |
+| clientIP | `string` | The client's IP address |
+
+- OnFailureReceivePrimeEvent
+
+| Key | Value | Description |
+|-----|-------|-------------|
+| success | `false` | Indicates the payment failed |
+| message | `string` | Error message describing the failure |
+
+### <span id="GeneralEvent">Apple Pay General Event Payload Type</span>
+
+| Key | Value | Description |
+|-----|-------|-------------|
+| status | `number` | The status code of the event |
+| message | `string` | A message describing the event |
+
+
+### <span id="TransactionEvent">Apple Pay Transaction Event Payload Type</span>
+
+| Property | Type | Description |
+|----------|------|-------------|
+| status | number | Transaction status code |
+| amount | number | Transaction amount |
+| message | string | Transaction message |
+| description | string | Detailed transaction description |
+
+
+
+## Version
+- TPDirect: v2.17.0
